@@ -1,10 +1,8 @@
-import express, { Application, Request, Response } from 'express'
-import { PrismaClient } from '@prisma/client'
+import express, { Application } from 'express'
 import userRouter from './routes/user'
 
 // Boot express
 const app: Application = express()
-// const prisma = new PrismaClient()
 const port = 3000
 
 app.use(express.json())
