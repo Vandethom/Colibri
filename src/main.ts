@@ -1,56 +1,78 @@
 import express, { Application, Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
+import userRouter from './routes/user'
 
 // Boot express
 const app: Application = express()
-const prisma = new PrismaClient()
+// const prisma = new PrismaClient()
 const port = 3000
 
 app.use(express.json())
+app.use(userRouter)
 
 
-app.post('/', async (req: Request, res: Response) => {
-	const {username, password} = req.body,
-		user = await prisma.user.create({
-			data: {
-				username: username,
-				password: password
-			}
-		})
+// app.post('/create_recipe', async (req: Request, res: Response) => {
+// 	const { name, steps, vegan, porkFree, glutenFree, ingredients } = req.body,
+// 		recipe = await prisma.recipe.create({ 
+// 			data: {
+// 				name: name,
+// 				steps: steps,
+// 				vegan: vegan,
+// 				porkFree: porkFree,
+// 				glutenFree: glutenFree,
+// 				ingredients: {
+// 					create: String[{'ale': 'zdqf'}]
+// 				}
+// 			}
+// 		})
 	
-	res.json(user)
-})
+// 	res.json(recipe)
+// })
 
-app.get('/', async (req: Request, res: Response) => {
-	const users = await prisma.user.findMany()
+// app.post('/', async (req: Request, res: Response) => {
+// 	const { firstName, lastName, email, password } = req.body,
+// 		user = await prisma.user.create({
+// 			data: {
+// 				firstName: firstName,
+// 				lastName: lastName,
+// 				email: email,
+// 				password: password
+// 			}
+// 		})
 
-	res.json(users)
-})
+// 	res.json(user)
+// })
 
-app.put('/', async (req: Request, res: Response) => {
-	const { id, username } = req.body,
-		updatedUser = await prisma.user.update({
-			where: {
-				id: id
-			},
-			data: {
-				username: username
-			}
-		})
+// app.get('/', async (req: Request, res: Response) => {
+// 	const users = await prisma.user.findMany()
+
+// 	res.json(users)
+// })
+
+// app.put('/', async (req: Request, res: Response) => {
+// 	const { uuid, username } = req.body,
+// 		updatedUser = await prisma.user.update({
+// 			where: {
+// 				uuid: uuid
+// 			},
+// 			data: {
+// 				username: username
+// 			}
+// 		})
 	
-	res.json(updatedUser)
-})
+// 	res.json(updatedUser)
+// })
 
-app.delete('/:id', async (req: Request, res: Response) => {
-	const id = req.params.id,
-		deletedUser = await prisma.user.delete({
-			where: {
-				id: Number(id)
-			}
-		})
+// app.delete('/:id', async (req: Request, res: Response) => {
+// 	const uuid = req.params.uuid,
+// 		deletedUser = await prisma.user.delete({
+// 			where: {
+// 				uuid: uuid
+// 			}
+// 		})
 
-	res.json(deletedUser)
-})
+// 	res.json(deletedUser)
+// })
 
 // Start server
 app.listen(port, () => console.log(`Server is listening on port ${port}!`))

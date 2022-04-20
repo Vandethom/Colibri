@@ -10,8 +10,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id Int @default(autoincrement()) @id
-  username String @unique
-  password String
+model User {    
+  firstName       String
+  lastName        String
+  email           String
+  password        String
+  recipes         Recipe[]
+
+  isAdmin         Boolean
+  uuid            String        @id @default(uuid())
+}   
+
+model Ingredient {
+  uuid            String        @id @default(uuid())
+  name            String
+  recipes         Recipe[]
+}   
+
+model Recipe {    
+  uuid            String        @id @default(uuid())
+  author          User          @relation(fields: [authorId], references: [uuid])
+  authorId        String
+
+  name            String
+  steps           String        @db.VarChar(12000)
+  ingredients     Ingredient[]
+
+  vegan           Boolean
+  porkFree        Boolean
+  glutenFree      Boolean
+
+  created_at      DateTime      @default(now())
+  updated_at      DateTime      @updatedAt
 }

@@ -24,8 +24,12 @@
   },
   "dependencies": {
     "@prisma/client": "^3.12.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/uuid": "^8.3.4",
+    "bcrypt": "^5.0.1",
     "express": "^4.17.3",
     "prettier": "^2.6.2",
-    "prisma": "^3.12.0"
+    "prisma": "^3.12.0",
+    "uuid": "^8.3.2"
   }
 }
