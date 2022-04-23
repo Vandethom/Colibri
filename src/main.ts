@@ -1,12 +1,26 @@
 import express, { Application } from 'express'
-import userRouter from './routes/user'
+import { RoutesConfig } from './routes/routesConfig'
+import { UserRoutes } from './routes/user.routes'
+import AuthRoute from './routes/auth.route'
 
 // Boot express
 const app: Application = express()
 const port = 3000
+const routes: Array<RoutesConfig> = []
 
 app.use(express.json())
-app.use(userRouter)
+
+routes.push(new UserRoutes(app))
+routes.push(new AuthRoute(app))
+
+
+app.listen(port, () => {
+	console.log(`Server is listening on port ${port} !`)
+
+	routes.forEach((route: RoutesConfig) => {
+		console.log(`Routes configured for ${route.getName()}`)
+	})
+})
 
 
 // app.post('/create_recipe', async (req: Request, res: Response) => {
@@ -73,4 +87,3 @@ app.use(userRouter)
 // })
 
 // Start server
-app.listen(port, () => console.log(`Server is listening on port ${port}!`))
