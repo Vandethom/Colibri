@@ -11,7 +11,7 @@ export class RecipeRoutes extends RoutesConfig {
     configureRoutes() {
         this.app.route('/recipe').get(RecipeController.getOneRecipe)
         this.app.route('/recipe/category/:id').get(RecipeController.getRecipesByCategory)
-        this.app.route('/recipe').get(RecipeController.getAllRecipes)
+        this.app.route('/recipes').get(RecipeController.getAllRecipes)
 
         this.app.route('/recipe').post(RecipeController.createRecipe)
 

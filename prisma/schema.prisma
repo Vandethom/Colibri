@@ -24,7 +24,6 @@ model User {
 model Ingredient {
   uuid            String        @id @default(uuid())
   name            String
-  recipes         Recipe[]
 }   
 
 model Recipe {    
@@ -34,7 +33,6 @@ model Recipe {
 
   name            String
   steps           String        @db.VarChar(12000)
-  ingredients     Ingredient[]
 
   vegan           Boolean
   porkFree        Boolean
