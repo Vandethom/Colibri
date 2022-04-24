@@ -3,7 +3,7 @@ import { RoutesConfig } from './routesConfig'
 import AuthController from '../controllers/auth.controller'
 
 
-export default class AuthRoutes extends RoutesConfig {
+export class AuthRoutes extends RoutesConfig {
 	constructor(app: Application) {
 		super(app, 'AuthRoutes')
 	}

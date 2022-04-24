@@ -7,6 +7,7 @@ const prisma = new PrismaClient(),
     token = process.env.SECRET_TOKEN as string
 
 class AuthController {
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Log-in  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async login(req: Request, res: Response) {
         const { email, password } = req.body,
             user = await prisma.user.findUnique({
@@ -28,7 +29,7 @@ class AuthController {
             }
         )}	
     }
-
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Sign up  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async signup(req: Request, res: Response) {
         const { firstName, lastName, email, password, isAdmin } = req.body
 

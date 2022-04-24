@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 export class UserController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get All Users  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
-	async getAllUsers (req: Request, res: Response) {
+	async getAllUsers (res: Response) {
 		const users = await prisma.user.findMany()
 
 		res.status(200).json(users)
