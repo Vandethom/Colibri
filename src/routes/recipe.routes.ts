@@ -1,7 +1,7 @@
 import { Application } from 'express'
 import { RoutesConfig } from './routesConfig'
 import RecipeController from '../controllers/recipe.controller'
-/* blabla */
+
 
 export class RecipeRoutes extends RoutesConfig {
 	constructor(app: Application) {
@@ -9,7 +9,7 @@ export class RecipeRoutes extends RoutesConfig {
 	}
 
     configureRoutes() {
-        this.app.route('/recipe').get(RecipeController.getOneRecipe)
+        this.app.route('/recipe/:uuid').get(RecipeController.getOneRecipe)
         this.app.route('/recipe/category/:id').get(RecipeController.getRecipesByCategory)
         this.app.route('/recipes').get(RecipeController.getAllRecipes)
 

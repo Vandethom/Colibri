@@ -27,31 +27,17 @@ class AuthController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get all Recipes  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async getAllRecipes (req: Request, res: Response) {
-        const recipesUuids = new Array(JSON.stringify(req.body)),
-            ingredientExists = await prisma.ingredient.findMany({
-                where: {
-                    uuid: { in: recipesUuids }
-                }
-            })
-        // TODO: 
-        // La fonction ne semble pas aller chercher les ID dans la DB
-        // PISTE 1 : le format de l'array fourni
-        // PISTE 2 : changer id par uuid
-        // PISTE 3 : IMPROBABLE : vérifier le type des donnée passées (string, number ?)
-    
-        if (!ingredientExists) {
-            res.json('Ingredients do not currently exist in ::: Database: Colibri, Table: Ingredient')
-        } else {
-            res.json(ingredientExists)
-        }
+        const recipes = await prisma.recipe.findMany()
+
+        res.status(200).json(recipes)
     }
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Create a Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async createRecipe (req: Request, res: Response) {
-        const { name, steps, vegan, porkFree, glutenFree} = req.body,
+        const { authorUuid, name, steps, vegan, porkFree, glutenFree} = req.body,
             userExists = await prisma.user.findUnique({
                 where: { 
-                    uuid: 'a067fc81-1208-487f-b0cd-6df13d7185ce'
+                    uuid: authorUuid
                 }
             })
 
