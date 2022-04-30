@@ -23,15 +23,17 @@ model User {
 
 model Ingredient {
   uuid            String        @id @default(uuid())
-  name            String
+  name            String        @unique
+  recipes         Recipe[]
 }   
 
 model Recipe {    
   uuid            String        @id @default(uuid())
-  author          User          @relation(fields: [authorId], references: [uuid])
-  authorId        String
+  author          User          @relation(fields: [authorUuid], references: [uuid])
+  authorUuid      String
 
   name            String
+  ingredients     Ingredient[]
   steps           String        @db.VarChar(12000)
 
   vegan           Boolean
