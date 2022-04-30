@@ -15,7 +15,8 @@ class AuthController {
             recipe = await prisma.recipe.findUnique({
                 where: {
                     uuid: uuid
-                }
+                },
+                include: { ingredients: true }
             })
         
         res.status(200).json(recipe)
@@ -61,20 +62,17 @@ class AuthController {
                 }
             })
 
-            console.log(ingredientsList.map((ingredient: string) => ({
-                where: { name: ingredient }, create:  { name: ingredient } 
-              })))
         if (!userExists) {
             res.status(500).json('Error retrieving the author of the recipe => Recipe was not saved in the database.')
         } else {
-            try {
+            try {                
                 const recipe = await prisma.recipe.create({
                     data: {
                         authorUuid: authorUuid,
                         name: name,
                         steps: steps,
-                        ingredients: { connectOrCreate: ingredientsList.map((tag: string) => ({
-                            where: { name: tag }, create:  { name: tag } 
+                        ingredients: { connectOrCreate: ingredientsList.map((ingredient: string) => ({
+                            where: { name: ingredient }, create:  { name: ingredient } 
                           })) },
                         vegan: vegan,
                         porkFree: porkFree,
@@ -83,7 +81,7 @@ class AuthController {
                     })
                 res.status(201).json(recipe)
             } catch (error) {
-                res.status(500).json({error: error})
+                res.status(500).json({ error: error })
             }
             
         }   
@@ -91,8 +89,30 @@ class AuthController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Update Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipe/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
-    async updateRecipe () {
-        console.log('Soon, I\'ll be a real function.')
+    async updateRecipe (req: Request, res: Response) {
+        const uuid = req.params.uuid,
+            { name, steps, ingredientsList, vegan, porkFree, glutenFree } = req.body
+            try {
+                console.log(ingredientsList.map((ingredient: string) => ({ name: ingredient })))
+                const updatedRecipe = await prisma.recipe.update({
+                    where: { uuid: uuid },
+                        data: {
+                            name: name,
+                            steps: steps,
+                            ingredients: { 
+                                set: [], 
+                                connectOrCreate: ingredientsList.map((ingredient: string) => ({
+                                    where: { name: ingredient }, create:  { name: ingredient } 
+                                })) },
+                            vegan: vegan,
+                            porkFree: porkFree,
+                            glutenFree: glutenFree
+                        }
+                    })
+                res.status(200).json(updatedRecipe)        
+            } catch (error) {
+                res.status(500).json({ error: 'All fields are required my dear.' })
+            }
     }
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Delete Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
