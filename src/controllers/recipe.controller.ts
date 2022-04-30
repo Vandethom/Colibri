@@ -117,8 +117,12 @@ class AuthController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Delete Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipe/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
-    async deleteRecipe () {
-        console.log('Soon, I\'ll be a real function.')
+    async deleteRecipe (req: Request, res: Response) {
+        const uuid = req.params.uuid,
+            recipeToDelete = await prisma.recipe.delete({
+                where: { uuid: uuid },
+            })
+        res.status(204).json(recipeToDelete)
     }
 
 }
