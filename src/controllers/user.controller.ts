@@ -7,6 +7,7 @@ const prisma = new PrismaClient()
 export class UserController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get All Users  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/users  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 	async getAllUsers (res: Response) {
 		const users = await prisma.user.findMany()
 
@@ -14,7 +15,8 @@ export class UserController {
 	}
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get User by ID  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
-	async getUserById (req: Request, res: Response) {
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/user/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+	async getUserByUuid (req: Request, res: Response) {
 		const uuid = req.params.uuid,
 			user = await prisma.user.findUnique({
 				where: {
@@ -26,6 +28,7 @@ export class UserController {
 	}
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Update User  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/user/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 	async updateUser (req: Request, res: Response) {
 		const { firstName, lastName, email, password, isAdmin } = req.body,
 			uuid = req.params.uuid,
@@ -49,6 +52,7 @@ export class UserController {
 		res.status(200).json(user)
 	}
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Delete User  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/user/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 	async deleteUser (req: Request, res: Response) {
 		const uuid = req.params.uuid
 		prisma.user.delete({

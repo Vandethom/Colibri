@@ -8,6 +8,7 @@ const prisma = new PrismaClient(),
 
 class AuthController {
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Log-in  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/login  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async login(req: Request, res: Response) {
         const { email, password } = req.body,
             user = await prisma.user.findUnique({
@@ -15,13 +16,17 @@ class AuthController {
             })
 
         if (!user) {
-            res.status(400).json('Bad inputs or User doesn\'t exist.')
+            res.status(400).json('Bad inputs or user doesn\'t exist.')
         } else {
             bcrypt.compare(password, user.password, function (err, result) {
                 if (result === true) {
                     res.status(200).json({
                         user: user,
-                        token: jwt.sign({ user }, token, { expiresIn: '1h' })
+                        token: jwt.sign(
+                            { user },
+                            token,
+                            { expiresIn: '1h' }
+                        )
                     })
                 } else {
                     res.status(401).json({ error: 'Mot de passe incorrect.'})
@@ -30,6 +35,7 @@ class AuthController {
         )}	
     }
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Sign up  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
+/* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/signup  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async signup(req: Request, res: Response) {
         const { firstName, lastName, email, password, isAdmin } = req.body
 

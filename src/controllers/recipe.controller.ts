@@ -6,7 +6,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 //    token = process.env.SECRET_TOKEN as string
 
-class AuthController {
+class RecipeController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get one Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipe/:uuid  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
@@ -16,7 +16,9 @@ class AuthController {
                 where: {
                     uuid: uuid
                 },
-                include: { ingredients: true }
+                include: {
+                    ingredients: true
+                }
             })
         
         res.status(200).json(recipe)
@@ -32,25 +34,13 @@ class AuthController {
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipes  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async getAllRecipes (req: Request, res: Response) {
         const recipes = await prisma.recipe.findMany({
-            include: { ingredients: true }
+            include: {
+                ingredients: true
+            }
         })
 
         res.status(200).json(recipes)
     }
-
-    // async checkIfIngredientsInDB (req: Request, res: Response, ingredientsList: string[]) {
-    //     const ingredientsExist = await prisma.ingredient.findMany({
-    //             where: {
-    //                 name: { in: ingredientsList}
-    //             }
-    //         })
-        
-    //     for (const i = 0; i < ingredientsExist.length; i + 1) {
-    //         if (!ingredientsExist[i]) {
-    //             await prisma.ingredient.create(ingredientsExist[i])
-    //         }
-    //     }
-    // }
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Create a Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
@@ -120,11 +110,14 @@ class AuthController {
     async deleteRecipe (req: Request, res: Response) {
         const uuid = req.params.uuid,
             recipeToDelete = await prisma.recipe.delete({
-                where: { uuid: uuid },
+                where: {
+                    uuid: uuid
+                },
             })
+
         res.status(204).json(recipeToDelete)
     }
 
 }
 
-export default new AuthController()
+export default new RecipeController()

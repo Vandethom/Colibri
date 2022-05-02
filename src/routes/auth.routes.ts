@@ -1,6 +1,7 @@
 import { Application } from 'express'
 import { RoutesConfig } from './routesConfig'
 import AuthController from '../controllers/auth.controller'
+import JWT from '../middlewares/auth'
 
 
 export class AuthRoutes extends RoutesConfig {
@@ -9,9 +10,9 @@ export class AuthRoutes extends RoutesConfig {
 	}
 
     configureRoutes() {
-        this.app.route('/login').post(AuthController.login)
+        this.app.route('/login').post([JWT.verifyToken, AuthController.login])
         
-        this.app.route('/signup').post(AuthController.signup)
+        this.app.route('/signup').post([AuthController.signup])
 
         return this.app
     }
