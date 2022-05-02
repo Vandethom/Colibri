@@ -1,7 +1,6 @@
 import express, { Application } from 'express'
 import helmet from 'helmet'
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const sanitize = require('sanitize')
+import rateLimit from 'express-rate-limit'
 
 import { RoutesConfig } from './routes/routesConfig'
 import { UserRoutes } from './routes/user.routes'
@@ -13,9 +12,15 @@ const app: Application = express()
 const port = 3000
 const routes: Array<RoutesConfig> = []
 
+// Restrict all routes to only 100 requests per IP address every 1o minutes
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000,    // 10 minutes
+    max: 100                     // 100 requests per IP
+})
+
 app.use(
 	helmet(),
-	sanitize,
+	limiter,
 	express.json()
 	)
 
