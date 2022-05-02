@@ -1,16 +1,23 @@
 import express, { Application } from 'express'
+import helmet from 'helmet'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const sanitize = require('sanitize')
+
 import { RoutesConfig } from './routes/routesConfig'
 import { UserRoutes } from './routes/user.routes'
 import { AuthRoutes } from './routes/auth.routes'
 import { RecipeRoutes } from './routes/recipe.routes'
 
 
-// Boot express
 const app: Application = express()
 const port = 3000
 const routes: Array<RoutesConfig> = []
 
-app.use(express.json())
+app.use(
+	helmet(),
+	sanitize,
+	express.json()
+	)
 
 routes.push(
 	new UserRoutes(app),
