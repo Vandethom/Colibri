@@ -12,16 +12,16 @@ const app: Application = express()
 const port = 3000
 const routes: Array<RoutesConfig> = []
 
-// Restrict all routes to only 100 requests per IP address every 1o minutes
+// Restrict all routes to only 100 requests per IP address every 10 minutes
 const limiter = rateLimit({
     windowMs: 10 * 60 * 1000,    // 10 minutes
     max: 100                     // 100 requests per IP
 })
 
 app.use(
+	express.json(),
 	helmet(),
-	limiter,
-	express.json()
+	limiter
 	)
 
 routes.push(
@@ -37,3 +37,5 @@ app.listen(port, () => {
 		console.log(`Routes configured for ${route.getName()}`)
 	})
 })
+
+export default app

@@ -8,7 +8,7 @@ export class UserController {
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get All Users  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/users  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
-	async getAllUsers (res: Response) {
+	async getAllUsers (req: Request, res: Response) {
 		const users = await prisma.user.findMany()
 
 		res.status(200).json(users)
