@@ -1,7 +1,8 @@
 import request from 'supertest'
 import app from '../../main'
 
-const expectedResult = [
+const token = process.env.TOKEN,
+    expectedResult = [
     {
         'firstName': 'Jane',
         'lastName': 'Dere',
@@ -50,13 +51,13 @@ const expectedResult = [
         'isAdmin': false,
         'uuid': 'a067fc81-1208-487f-b0cd-6df13d7185ce'
     }
-]
+    ]
 
 describe('UserController', () => {
-    it('should give a list of all users in database', async () => {
+    test('should give a list of all users in database', async () => {
         const res = await request(app)
             .get('/users')
-            .set('Authorization', `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImZpcnN0TmFtZSI6IlRpbSIsImxhc3ROYW1lIjoiSm9ucyIsImVtYWlsIjoidGltLmpvbnNAb3V0bG9vay5jb20iLCJwYXNzd29yZCI6IiQyYiQxMiRWemlBR0UvM2xIZDAvelVMWkFGMGhla2tYVFZoS01XdUcuQmZzdGJQRUsyU2c2UzZJZUFCbSIsImlzQWRtaW4iOnRydWUsInV1aWQiOiI3YWNmMzFlYy0wNjA2LTRiNTUtOWQ4OC0xMDg2YTJlYjQ1ZTEifSwiaWF0IjoxNjUxNzQwMDQ1LCJleHAiOjE2NTE3NDM2NDV9.i-GlgwOJ7VMYaGH-r9-D3M7WXyU22_q-BvLkjWHmav8`)
+            .set('Authorization', `Bearer ${token}`)
         
         expect(res.statusCode).toEqual(200)
         expect(res.body).toEqual(expectedResult)
