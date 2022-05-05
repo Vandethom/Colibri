@@ -24,7 +24,7 @@ export class UserController {
 				}
 			})
 
-		res.json(user)
+		res.status(200).json(user)
 	}
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Update User  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
