@@ -12,9 +12,10 @@ class JWT {
             jwt.verify(token, TOKEN, (err, user) => {
                 if (err) {
                     res.status(403).json({ success: false, message: 'Token expired'})
+                } else {
+                    req.body.user = user
+                    next()
                 }
-                req.body.user = user
-                next()
             })
         } else {
             res.status(403).json({ success: false, message: 'Unauthorized'})

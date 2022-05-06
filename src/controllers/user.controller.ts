@@ -11,7 +11,7 @@ export class UserController {
 	async getAllUsers (req: Request, res: Response) {
 		const users = await prisma.user.findMany()
 
-		res.status(200).json(users)
+		return res.status(200).json(users)
 	}
 
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Get User by ID  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */

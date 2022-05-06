@@ -19,8 +19,8 @@ const limiter = rateLimit({
 })
 
 app.use(
-	express.json(),
 	helmet(),
+	express.json(),
 	limiter
 	)
 

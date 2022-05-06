@@ -3,8 +3,6 @@ import { RoutesConfig } from './routesConfig'
 import UserController from '../controllers/user.controller'
 import JWT from '../middlewares/auth'
 
-import * as dotenv from 'dotenv'
-dotenv.config()
 
 export class UserRoutes extends RoutesConfig {
 	constructor(app: Application) {
