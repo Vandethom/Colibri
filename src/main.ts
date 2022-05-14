@@ -2,6 +2,7 @@ import express, { Application } from 'express'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
 
+import errorHandler from './middlewares/error-handler'
 import { RoutesConfig } from './routes/routesConfig'
 import { UserRoutes } from './routes/user.routes'
 import { AuthRoutes } from './routes/auth.routes'
@@ -21,7 +22,8 @@ const limiter = rateLimit({
 app.use(
 	helmet(),
 	express.json(),
-	limiter
+	limiter,
+	errorHandler
 	)
 
 routes.push(

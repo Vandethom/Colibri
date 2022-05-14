@@ -1,8 +1,11 @@
+import { getAllUsers, getUserByUuid } from '../user.controller'
+import { prismaMock } from './../singleton'
 import request from 'supertest'
 import app from '../../main'
 
 const token = process.env.TOKEN,
     badToken = 'A mistake obviously.',
+    badUuid = '00000000-0000-0000-0000-00000000000',
     exampleUuid = '1995e5c4-0ba3-486a-a153-5ed175b9986d',
     expectedResult = [
         {
@@ -33,8 +36,8 @@ const token = process.env.TOKEN,
             'firstName': 'Tim',
             'lastName': 'Jons',
             'email': 'tim.jons@outlook.com',
-            'password': '$2b$12$VziAGE/3lHd0/zULZAF0hekkXTVhKMWuG.BfstbPEK2Sg6S6IeABm',
-            'isAdmin': true,
+            'password': 'timjons',
+            'isAdmin': false,
             'uuid': '7acf31ec-0606-4b55-9d88-1086a2eb45e1'
         },
         {
@@ -52,11 +55,27 @@ const token = process.env.TOKEN,
             'password': '$2b$12$wMYgIxu2eqNrZcUDBuL.Ke2T6AmhESEQbh2Szf2pkYPX2OfrYj7vC',
             'isAdmin': false,
             'uuid': 'a067fc81-1208-487f-b0cd-6df13d7185ce'
+        },
+        {
+            'firstName': 'Joe',
+            'lastName': 'Dalton',
+            'email': 'joe.dalton@outlook.com',
+            'password': '$2b$12$aABYxWVJdzxmRHIOmzRRSOLAUsEbqNCQlDFz91cFowtdqzGsDXZbS',
+            'isAdmin': false,
+            'uuid': 'e29a1dea-40f0-4c66-90d9-510e16d8449d'
         }
     ],
-    expectedUser = {
+    userExample = {
         'firstName': 'Jane',
         'lastName': 'Dere',
+        'email': 'jane@dere.com',
+        'password': '$2b$12$tGC7Aih9YXKvLz5uzqdGkOvYwCH9sclEOm/kvJMmaf14xjknicuHW',
+        'isAdmin': false,
+        'uuid': '1995e5c4-0ba3-486a-a153-5ed175b9986d'
+    },
+    badUserExample = {
+        'firstName': '',
+        'lastName': '',
         'email': 'jane@dere.com',
         'password': '$2b$12$tGC7Aih9YXKvLz5uzqdGkOvYwCH9sclEOm/kvJMmaf14xjknicuHW',
         'isAdmin': false,
@@ -93,7 +112,16 @@ describe('getUserByUuid', () => {
             .set('Authorization', `Bearer ${token}`)
 
         expect(res.statusCode).toEqual(200)
-        expect(res.body).toEqual(expectedUser)
+        expect(res.body).toEqual(userExample)
+    })
+
+    it('should return an error if a bad uuid is given', async () => {
+        const res = await request(app)
+            .get(`/user/${badUuid}`)
+            .set('Authorization', `Bearer ${token}`)
+
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toEqual(`No user with corresponding uuid : '${badUuid}' was found.`)
     })
 
     it('should return an error if the token is wrong', async () => {
@@ -106,5 +134,50 @@ describe('getUserByUuid', () => {
             'success': false,
             'message': 'Token expired'
         })
+    })
+})
+
+describe('updateUser', () => {
+    it('should update the user designated by uuid parameter', async () => {
+        const res = await request(app)
+            .put(`/user/${exampleUuid}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(userExample)
+        
+        expect(res.statusCode).toEqual(200)
+        expect(res.body).toEqual(userExample)
+    })
+
+    it('should return an error if the token is wrong', async () => {
+        const res = await request(app)
+            .put(`/user/${exampleUuid}`)
+            .set('Authorization', `Bearer ${badToken}`)
+            .send(userExample)
+        
+        expect(res.statusCode).toEqual(403)
+        expect(res.body).toEqual({
+            'success': false,
+            'message': 'Token expired'
+        })
+    })
+
+    it('should return an error if a bad uuid is given', async () => {
+        const res = await request(app)
+            .put(`/user/${badUuid}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(userExample)
+        
+        expect(res.statusCode).toEqual(404)
+        expect(res.body).toEqual(`No user with corresponding uuid : '${badUuid}' was found.`)
+    })
+
+    it('should return an error if an input is poorly filled', async () => {
+        const res = await request(app)
+            .put(`/user/${exampleUuid}`)
+            .set('Authorization', `Bearer ${token}`)
+            .send(badUserExample)
+        
+        expect(res.statusCode).toEqual(400)
+        expect(res.body).toEqual('All fields must be provided to update user.')
     })
 })
