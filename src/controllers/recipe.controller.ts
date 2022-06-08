@@ -62,9 +62,9 @@ class RecipeController {
                         authorUuid: '34ae65c3-426d-4327-8dbc-78bca22197fa',
                         name: name,
                         steps: steps,
-                        // ingredients: {
-                        //     create : [{ uuid : v4(), name: ingredients }]
-                        // },
+                        ingredients: {
+                            create : [{ uuid : v4(), name: ingredients }]
+                        },
                         vegan: true,
                         porkFree: true,
                         glutenFree: true
