@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { PrismaClient } from '@prisma/client'
+import { uuid as v4 } from 'uuidv4'
 // import checkIngredientInDB from '../middlewares/ingredientExists'
 // import jwt from 'jsonwebtoken'
 
@@ -45,28 +46,28 @@ class RecipeController {
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  Create a Recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
 /* ~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-  http://localhost:3000/recipe  -~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~ */
     async createRecipe (req: Request, res: Response) {
-        const { authorUuid, name, steps, ingredientsList, vegan, porkFree, glutenFree } = req.body,
+        const { authorUuid, name, steps, ingredients, vegan, porkFree, glutenFree } = req.body,
             userExists = await prisma.user.findUnique({
                 where: { 
-                    uuid: authorUuid
+                    uuid: '34ae65c3-426d-4327-8dbc-78bca22197fa'
                 }
             })
 
         if (!userExists) {
             res.status(500).json('Error retrieving the author of the recipe => Recipe was not saved in the database.')
         } else {
-            try {                
+            try {             
                 const recipe = await prisma.recipe.create({
                     data: {
-                        authorUuid: authorUuid,
+                        authorUuid: '34ae65c3-426d-4327-8dbc-78bca22197fa',
                         name: name,
                         steps: steps,
-                        ingredients: { connectOrCreate: ingredientsList.map((ingredient: string) => ({
-                            where: { name: ingredient }, create:  { name: ingredient } 
-                          })) },
-                        vegan: vegan,
-                        porkFree: porkFree,
-                        glutenFree: glutenFree
+                        // ingredients: {
+                        //     create : [{ uuid : v4(), name: ingredients }]
+                        // },
+                        vegan: true,
+                        porkFree: true,
+                        glutenFree: true
                     }
                     })
                 res.status(201).json(recipe)

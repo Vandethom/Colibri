@@ -14,7 +14,7 @@ export class RecipeRoutes extends RoutesConfig {
         this.app.route('/recipe/category/:id').get([RecipeController.getRecipesByCategory])
         this.app.route('/recipes').get([RecipeController.getAllRecipes])
 
-        this.app.route('/recipe').post([JWT.verifyToken, RecipeController.createRecipe])
+        this.app.route('/recipe').post([/* JWT.verifyToken ,*/ RecipeController.createRecipe])
 
         this.app.route('/recipe/:uuid').put([JWT.verifyToken, RecipeController.updateRecipe])
 

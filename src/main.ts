@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import helmet from 'helmet'
 import rateLimit from 'express-rate-limit'
+import cors from 'cors'
 
 import errorHandler from './middlewares/error-handler'
 import { RoutesConfig } from './routes/routesConfig'
@@ -10,7 +11,7 @@ import { RecipeRoutes } from './routes/recipe.routes'
 
 
 const app: Application = express()
-const port = 3000
+const port = 3001
 const routes: Array<RoutesConfig> = []
 
 // Restrict all routes to only 100 requests per IP address every 10 minutes
@@ -21,6 +22,7 @@ const limiter = rateLimit({
 
 app.use(
 	helmet(),
+	cors(),
 	express.json(),
 	limiter,
 	errorHandler
